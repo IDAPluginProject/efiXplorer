@@ -254,6 +254,49 @@ bool show_services(json_list_t services, qstring title) {
   return true;
 }
 
+static const char g_chooser_prefix[] = "efiXplorer: ";
+
+struct choosers_docker_t : public event_listener_t {
+  qstring anchor; // the chooser the others are tabbed onto
+
+  ssize_t idaapi on_event(ssize_t code, va_list va) override {
+    if (code != ui_widget_visible) {
+      return 0;
+    }
+
+    TWidget *widget = va_arg(va, TWidget *);
+    qstring title;
+    const size_t prefix_len = sizeof(g_chooser_prefix) - 1;
+    if (!get_widget_title(&title, widget) ||
+        strncmp(title.c_str(), g_chooser_prefix, prefix_len)) {
+      return 0;
+    }
+
+    if (anchor.empty()) {
+      // a null destination gives an area of its own next to the active tab
+      set_dock_pos(title.c_str(), nullptr, DP_RIGHT);
+      anchor = title;
+    } else {
+      set_dock_pos(title.c_str(), anchor.c_str(), DP_TAB);
+    }
+
+    return 0;
+  }
+};
+
+static choosers_docker_t g_docker;
+
+//--------------------------------------------------------------------------
+// the group is rebuilt on every run, to be called before the choosers open
+void group_choosers() {
+  static bool hooked = false;
+
+  g_docker.anchor.qclear();
+  if (!hooked) {
+    hooked = hook_event_listener(HT_UI, &g_docker, nullptr);
+  }
+}
+
 //-------------------------------------------------------------------------
 // action handler for protocols dependencies
 struct protocols_deps_handler_t : public action_handler_t {

@@ -449,23 +449,24 @@ void efi_analysis::efi_analyser_arm_t::find_pei_services_function() {
 // show all non-empty choosers windows (services, protocols, etc)
 void efi_analysis::efi_analyser_arm_t::show_all_choosers() {
   qstring title;
-
-  // open window with all services
-  if (m_all_services.size()) {
-    title = "efiXplorer: services";
-    show_services(m_all_services, title);
-  }
-
-  // open window with data guids
-  if (m_all_guids.size()) {
-    qstring title = "efiXplorer: GUIDs";
-    show_guids(m_all_guids, title);
-  }
+  group_choosers();
 
   // open window with protocols
   if (m_all_protocols.size()) {
     title = "efiXplorer: protocols";
     show_protocols(m_all_protocols, title);
+  }
+
+  // open window with data guids
+  if (m_all_guids.size()) {
+    title = "efiXplorer: GUIDs";
+    show_guids(m_all_guids, title);
+  }
+
+  // open window with all services
+  if (m_all_services.size()) {
+    title = "efiXplorer: services";
+    show_services(m_all_services, title);
   }
 }
 
