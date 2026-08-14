@@ -2540,12 +2540,10 @@ void efi_analysis::efi_analyser_t::dump_json() {
 // show all non-empty choosers windows (services, protocols, nvram, etc)
 void efi_analysis::efi_analyser_x86_t::show_all_choosers() {
   qstring title;
+  group_choosers();
 
-  // open window with all services
-  if (m_all_services.size()) {
-    title = "efiXplorer: services";
-    show_services(m_all_services, title);
-  }
+  // each chooser is tabbed right after the first one, so they are opened in
+  // reverse of the tab order: protocols, NVRAM, services, GUIDs, vulns
 
   // open window with protocols
   if (m_ftype == ffs_file_type_t::peim) {
@@ -2558,18 +2556,6 @@ void efi_analysis::efi_analyser_x86_t::show_all_choosers() {
       title = "efiXplorer: protocols";
       show_protocols(m_all_protocols, title);
     }
-  }
-
-  // open window with data guids
-  if (m_all_guids.size()) {
-    qstring title = "efiXplorer: GUIDs";
-    show_guids(m_all_guids, title);
-  }
-
-  // open window with NVRAM variables
-  if (m_nvram_variables.size()) {
-    qstring title = "efiXplorer: NVRAM";
-    show_nvram(m_nvram_variables, title);
   }
 
   // open window with vulnerabilities
@@ -2591,8 +2577,26 @@ void efi_analysis::efi_analyser_x86_t::show_all_choosers() {
       }
     }
 
-    qstring title = "efiXplorer: vulns";
+    title = "efiXplorer: vulns";
     show_vulns(vulns, title);
+  }
+
+  // open window with data guids
+  if (m_all_guids.size()) {
+    title = "efiXplorer: GUIDs";
+    show_guids(m_all_guids, title);
+  }
+
+  // open window with all services
+  if (m_all_services.size()) {
+    title = "efiXplorer: services";
+    show_services(m_all_services, title);
+  }
+
+  // open window with NVRAM variables
+  if (m_nvram_variables.size()) {
+    title = "efiXplorer: NVRAM";
+    show_nvram(m_nvram_variables, title);
   }
 }
 

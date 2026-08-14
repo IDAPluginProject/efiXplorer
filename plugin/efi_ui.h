@@ -255,5 +255,6 @@ bool show_guids(json_list_t guid, qstring title);
 bool show_protocols(json_list_t protocols, qstring title);
 bool show_ppis(json_list_t protocols, qstring title);
 bool show_services(json_list_t services, qstring title);
+void group_choosers();
 void attach_action_protocols_deps();
 void attach_action_modules_seq();
