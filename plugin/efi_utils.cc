@@ -178,22 +178,23 @@ int efi_utils::log(const char *fmt, ...) {
 }
 
 //--------------------------------------------------------------------------
-// set EFI_GUID type
-void efi_utils::set_guid_type(ea_t ea) {
+// set named type
+void efi_utils::set_type(ea_t ea, std::string type) {
   tinfo_t tinfo;
-  if (tinfo.get_named_type(get_idati(), "EFI_GUID")) {
+  if (tinfo.get_named_type(get_idati(), type.c_str())) {
     apply_tinfo(ea, tinfo, TINFO_DEFINITE);
   }
 }
 
 //--------------------------------------------------------------------------
+// set EFI_GUID type
+void efi_utils::set_guid_type(ea_t ea) { efi_utils::set_type(ea, "EFI_GUID"); }
+
+//--------------------------------------------------------------------------
 // set type and name
 void efi_utils::set_type_and_name(ea_t ea, std::string name, std::string type) {
   set_name(ea, name.c_str(), SN_FORCE);
-  tinfo_t tinfo;
-  if (tinfo.get_named_type(get_idati(), type.c_str())) {
-    apply_tinfo(ea, tinfo, TINFO_DEFINITE);
-  }
+  efi_utils::set_type(ea, type);
 }
 
 //--------------------------------------------------------------------------

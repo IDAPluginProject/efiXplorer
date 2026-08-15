@@ -153,7 +153,7 @@ service_info_32_t g_pei_services_table32[] = {
     {"InstallPpi", 0x18, 2},
     {"ReInstallPpi", 0x1c, 3},
     {"LocatePpi", 0x20, 2},
-    {"NotifyPpi", 0x24, NONE_PUSH},
+    {"NotifyPpi", 0x24, 2},
     {"GetBootMode", 0x28, NONE_PUSH},
     {"SetBootMode", 0x2c, NONE_PUSH},
     {"GetHobList", 0x30, NONE_PUSH},

@@ -356,6 +356,8 @@ public:
     import_type(idati, -1, "EFI_RUNTIME_SERVICES");
     import_type(idati, -1, "_EFI_SMM_SYSTEM_TABLE2");
     import_type(idati, -1, "EFI_PEI_SERVICES");
+    import_type(idati, -1, "EFI_PEI_PPI_DESCRIPTOR");
+    import_type(idati, -1, "EFI_PEI_NOTIFY_DESCRIPTOR");
     import_type(idati, -1, "EFI_PEI_READ_ONLY_VARIABLE2_PPI");
     import_type(idati, -1, "EFI_SMM_VARIABLE_PROTOCOL");
     m_macro_efi_tid = import_type(idati, -1, "MACRO_EFI");

@@ -65,6 +65,7 @@ void set_entry_arg_to_pei_svc();
 void set_pei_entry_type_for_uefi();
 void set_guid_type(ea_t ea);
 void set_ptr_type_and_name(ea_t ea, std::string name, std::string type);
+void set_type(ea_t ea, std::string type);
 void set_type_and_name(ea_t ea, std::string name, std::string type);
 
 int log(const char *fmt, ...);
