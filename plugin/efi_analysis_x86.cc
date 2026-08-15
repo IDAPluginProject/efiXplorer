@@ -993,6 +993,20 @@ void efi_analysis::efi_analyser_x86_t::get_variable_ppi_calls_all32() {
 }
 
 //--------------------------------------------------------------------------
+// get the descriptor type for the PEI services
+static const char *ppi_descriptor_type(const char *service) {
+  if (!qstrcmp(service, "InstallPpi") || !qstrcmp(service, "ReInstallPpi")) {
+    return "EFI_PEI_PPI_DESCRIPTOR";
+  }
+
+  if (!qstrcmp(service, "NotifyPpi")) {
+    return "EFI_PEI_NOTIFY_DESCRIPTOR";
+  }
+
+  return nullptr;
+}
+
+//--------------------------------------------------------------------------
 // get PPI names for 32-bit PEI modules
 void efi_analysis::efi_analyser_x86_t::get_ppi_names32() {
   ea_t start = m_start_addr;
@@ -1047,6 +1061,17 @@ void efi_analysis::efi_analyser_x86_t::get_ppi_names32() {
       if (found) {
         efi_utils::log("found PPI GUID parameter at 0x%" PRIx64 "\n",
                        u64_addr(guid_code_address));
+
+        // InstallPpi, ReInstallPpi and NotifyPpi takes a descriptor
+        // LocatePpi takes an EFI_GUID pointer
+        auto descriptor = ppi_descriptor_type(g_pei_services_table32[i].name);
+        if (descriptor != nullptr) {
+          efi_utils::set_type(guid_data_address, descriptor);
+
+          // the GUID address is stored in the Guid field of the descriptor
+          guid_data_address = get_wide_dword(guid_data_address + 4);
+        }
+
         auto guid = efi_utils::get_guid_by_address(guid_data_address);
         if (!efi_utils::valid_guid(guid)) {
           continue;
